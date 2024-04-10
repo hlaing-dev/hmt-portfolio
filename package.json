@@ -1,13 +1,12 @@
 {
   "name": "developer-portfolio",
-  "description": "Portfolio of Hlaing Min Thein",
+  "description": "Portfolio of Abu Said",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "local": "next build & next start",
     "lint": "next lint"
   },
   "dependencies": {
