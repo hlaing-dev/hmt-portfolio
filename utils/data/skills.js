@@ -24,6 +24,7 @@ export const skillsData = [
   'KendoUI',
   'PrimeNG',
   'GCP',
+  'aws',
   'BigQuery'
 ]
 
