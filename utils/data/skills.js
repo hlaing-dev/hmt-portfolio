@@ -10,22 +10,24 @@ export const skillsData = [
   'Express',
   'c#',
   'ASP.NET',
+  'Go',
   'Tailwind',
   'MongoDB',
   'MySQL',
   'MicrosoftSQL',
   'PostgreSQL',
+  'Graphql',
   'Git',
   'Bootstrap',
   'Docker',
+  'Azure',
   'Firebase',
   'MaterialUI',
   'Nginx',
   'KendoUI',
   'PrimeNG',
   'GCP',
-  'aws',
-  'BigQuery'
+  'aws'
 ]
 
 // Choose your skills from below. Make sure it's in the same format and spelled correctly.

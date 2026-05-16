@@ -54,7 +54,7 @@ function Experience() {
                           {experience.duration}
                         </p>
                       </div>
-                      <div className="flex items-center gap-x-8 px-3 py-5">
+                      <div className="flex items-start gap-x-8 px-3 py-5">
                         <div className="text-violet-500  transition-all duration-300 hover:scale-125">
                           <BsPersonWorkspace size={36} />
                         </div>
@@ -62,9 +62,9 @@ function Experience() {
                           <p className="text-base sm:text-xl mb-2 font-medium uppercase">
                             {experience.title}
                           </p>
-                          <p className="text-sm sm:text-base">
-                            {experience.company}
-                          </p>
+                          <p className="text-sm sm:text-base text-slate-100">{experience.company}</p>
+                          <p className="mt-2 text-xs sm:text-sm text-slate-300">{experience.summary}</p>
+                          <p className="mt-2 text-xs sm:text-sm text-cyan-300">{experience.stack}</p>
                         </div>
                       </div>
                     </div>

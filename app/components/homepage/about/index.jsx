@@ -6,7 +6,7 @@ import Image from "next/image";
 
 function AboutSection() {
   return (
-    <div id="about" className="my-12 lg:my-16 relative">
+    <div id="about" className="relative my-12 lg:my-16">
       <div className="hidden lg:flex flex-col items-center absolute top-16 -right-8">
         <span className="bg-[#1a1443] w-fit text-white rotate-90 p-2 px-5 text-xl rounded-md">
           ABOUT ME
@@ -15,10 +15,10 @@ function AboutSection() {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
         <div className="order-2 lg:order-1">
-          <p className="font-medium mb-5 text-[#16f2b3] text-xl uppercase">
+          <p className="mb-5 text-xl font-medium uppercase tracking-[0.18em] text-cyan-300">
             Who I am?
           </p>
-          <p className="text-gray-200 text-sm lg:text-lg">
+          <p className="text-sm leading-7 text-slate-300 lg:text-lg lg:leading-8">
             {personalData.description}
           </p>
         </div>
@@ -28,7 +28,7 @@ function AboutSection() {
             width={280}
             height={280}
             alt="Hlaing Min Thein"
-            className="rounded-lg transition-all duration-1000 grayscale hover:grayscale-0 hover:scale-110 cursor-pointer"
+            className="cursor-pointer rounded-2xl border border-[#2a3f72] shadow-[0_16px_45px_rgba(10,18,45,0.55)] transition-all duration-700 grayscale hover:scale-105 hover:grayscale-0"
           />
         </div>
       </div>
