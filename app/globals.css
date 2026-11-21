@@ -390,6 +390,13 @@ button:disabled {
   font-size: 13px;
   box-shadow: var(--shadow);
 }
+.controls button svg {
+  display: block;
+  margin: auto;
+}
+.controls button[aria-pressed="true"] {
+  color: var(--gold);
+}
 
 /* Mobile dock (hidden on desktop) */
 .dock {

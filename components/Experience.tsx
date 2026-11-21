@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { profile, sections, type SectionId } from "@/content/profile";
 import { SectionContent } from "./ui/SectionContent";
+import { Ambient } from "./ambient";
 
 const Scene = dynamic(() => import("./scene/Scene"), { ssr: false });
 
@@ -28,6 +29,53 @@ export function Experience() {
   const [paused, setPaused] = useState(false);
   const [panelSide, setPanelSide] = useState<"right" | "bottom">("right");
   const lastWheel = useRef(0);
+  const [soundOn, setSoundOn] = useState(false);
+  const ambient = useRef<Ambient | null>(null);
+
+  // Background music: off by default. If the visitor turned it on before, it
+  // comes back on their first tap/click (browsers block audio until then).
+  useEffect(() => {
+    let wanted = false;
+    try {
+      wanted = localStorage.getItem("sky-sound") === "on";
+    } catch {
+      /* storage unavailable */
+    }
+    if (!wanted) return;
+    const resume = () => setSoundOn(true);
+    window.addEventListener("pointerdown", resume, { once: true });
+    window.addEventListener("keydown", resume, { once: true });
+    return () => {
+      window.removeEventListener("pointerdown", resume);
+      window.removeEventListener("keydown", resume);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!soundOn) {
+      ambient.current?.stop();
+      return;
+    }
+    ambient.current ??= new Ambient();
+    ambient.current.start();
+    const onVisibility = () => ambient.current?.setSuspended(document.hidden);
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, [soundOn]);
+
+  useEffect(() => () => ambient.current?.stop(), []);
+
+  const toggleSound = () => {
+    setSoundOn((on) => {
+      const next = !on;
+      try {
+        localStorage.setItem("sky-sound", next ? "on" : "off");
+      } catch {
+        /* storage unavailable */
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     setWebgl(hasWebGL());
@@ -190,6 +238,25 @@ export function Experience() {
           title={paused ? "Resume motion" : "Pause motion"}
         >
           {paused ? "▶" : "❚❚"}
+        </button>
+        <button
+          type="button"
+          onClick={toggleSound}
+          aria-pressed={soundOn}
+          aria-label={soundOn ? "Turn music off" : "Turn music on"}
+          title={soundOn ? "Music off" : "Music on"}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor" />
+            {soundOn ? (
+              <>
+                <path d="M15.5 8.5a5 5 0 0 1 0 7" />
+                <path d="M18.5 5.5a9 9 0 0 1 0 13" />
+              </>
+            ) : (
+              <path d="m16 9 6 6m0-6-6 6" />
+            )}
+          </svg>
         </button>
       </div>
 
