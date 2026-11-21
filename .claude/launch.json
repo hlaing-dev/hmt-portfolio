@@ -1,0 +1,8 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "portfolio-dev", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev"], "port": 3000 },
+    { "name": "portfolio-prod", "runtimeExecutable": "sh", "runtimeArgs": ["-c", "export NEXT_DIST_DIR=.next-prod.nosync && npx next build --webpack && npx next start -p 3100"], "port": 3100 },
+    { "name": "portfolio-start", "runtimeExecutable": "sh", "runtimeArgs": ["-c", "NEXT_DIST_DIR=.next-prod.nosync npx next start -p 3100"], "port": 3100 }
+  ]
+}
