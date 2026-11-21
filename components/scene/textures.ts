@@ -82,3 +82,32 @@ export function rayTexture() {
     ctx.fillRect(0, 0, s, s);
   });
 }
+
+/** Dark editor screen with syntax-coloured lines; tiles vertically so it can scroll. */
+export function codeTexture() {
+  const tex = canvasTexture("code", 256, (ctx, s) => {
+    ctx.fillStyle = "#1d2333";
+    ctx.fillRect(0, 0, s, s);
+    const rand = mulberry32(31);
+    const colors = ["#7fc8f8", "#f49cbb", "#f6c453", "#9be39b", "#c7a6dd", "#e6ebf5"];
+    const lineH = s / 22;
+    let indent = 0;
+    for (let i = 0; i < 22; i++) {
+      const y = i * lineH + lineH * 0.3;
+      if (rand() < 0.12) continue;
+      indent = Math.max(0, Math.min(3, indent + (rand() < 0.3 ? 1 : rand() < 0.3 ? -1 : 0)));
+      let x = 10 + indent * 14;
+      const words = 1 + Math.floor(rand() * 4);
+      for (let w = 0; w < words && x < s - 12; w++) {
+        const len = 12 + rand() * 46;
+        ctx.fillStyle = colors[Math.floor(rand() * colors.length)];
+        ctx.globalAlpha = 0.9;
+        ctx.fillRect(x, y, Math.min(len, s - 12 - x), lineH * 0.42);
+        x += len + 6;
+      }
+    }
+    ctx.globalAlpha = 1;
+  });
+  tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+  return tex;
+}

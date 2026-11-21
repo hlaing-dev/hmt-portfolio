@@ -6,6 +6,8 @@ import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { education, experience, featuredProjects as projects, profile, sections, skills, stats, type SectionId } from "@/content/profile";
 import { Lamp } from "./Flora";
+import { TreehouseStudio } from "./Treehouse";
+import { Schoolhouse } from "./Schoolhouse";
 import { TOP_Y, along, islands, labelAnchors, palette, steps, views, type Vec3 } from "./layout";
 
 type Focus = SectionId | null;
@@ -107,69 +109,14 @@ function Post({ height = 1.6 }: { height?: number }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* About: the Sky Hall, a domed marble pavilion with a glowing core   */
+/* About: a big shade tree and treehouse; the developer codes beneath */
 /* ------------------------------------------------------------------ */
 
 function SkyHall({ active }: { active: boolean }) {
-  const core = useRef<THREE.Mesh>(null);
   const base = add(islands.hall.position, [0, TOP_Y, 0]);
-  useFrame(({ clock }) => {
-    const m = core.current;
-    if (!m) return;
-    m.rotation.y = clock.elapsedTime * 0.6;
-    m.position.y = 1.95 + Math.sin(clock.elapsedTime * 1.3) * 0.12;
-  });
-  const cols = 10;
   return (
     <group position={base}>
-      <mesh position={[0, 0.17, 0]} receiveShadow castShadow>
-        <cylinderGeometry args={[3.1, 3.25, 0.34, 40]} />
-        <meshStandardMaterial color={palette.marble} roughness={0.7} />
-      </mesh>
-      <mesh position={[0, 0.46, 0]} receiveShadow castShadow>
-        <cylinderGeometry args={[2.75, 2.85, 0.26, 40]} />
-        <meshStandardMaterial color={palette.marbleShade} roughness={0.7} />
-      </mesh>
-      {Array.from({ length: cols }, (_, i) => {
-        const a = (i / cols) * Math.PI * 2;
-        return (
-          <group key={i} position={[Math.cos(a) * 2.35, 0.59, Math.sin(a) * 2.35]}>
-            <mesh position={[0, 1.3, 0]} castShadow>
-              <cylinderGeometry args={[0.16, 0.19, 2.6, 10]} />
-              <meshStandardMaterial color={palette.marble} roughness={0.6} />
-            </mesh>
-            <mesh position={[0, 2.66, 0]}>
-              <boxGeometry args={[0.46, 0.14, 0.46]} />
-              <meshStandardMaterial color={palette.gold} metalness={0.5} roughness={0.4} />
-            </mesh>
-          </group>
-        );
-      })}
-      <mesh position={[0, 3.42, 0]} castShadow>
-        <cylinderGeometry args={[2.7, 2.7, 0.34, 40]} />
-        <meshStandardMaterial color={palette.marble} roughness={0.6} />
-      </mesh>
-      <mesh position={[0, 3.6, 0]}>
-        <torusGeometry args={[2.62, 0.07, 6, 48]} />
-        <meshStandardMaterial color={palette.gold} metalness={0.6} roughness={0.35} />
-      </mesh>
-      <mesh position={[0, 3.58, 0]} castShadow>
-        <sphereGeometry args={[2.45, 40, 20, 0, Math.PI * 2, 0, Math.PI / 2]} />
-        <meshStandardMaterial color="#fbf8f2" roughness={0.45} />
-      </mesh>
-      <mesh position={[0, 6.05, 0]}>
-        <cylinderGeometry args={[0.32, 0.4, 0.3, 12]} />
-        <meshStandardMaterial color={palette.gold} metalness={0.6} roughness={0.35} />
-      </mesh>
-      <mesh position={[0, 6.75, 0]} castShadow>
-        <coneGeometry args={[0.2, 1.2, 10]} />
-        <meshStandardMaterial color={palette.gold} metalness={0.6} roughness={0.35} />
-      </mesh>
-      <mesh ref={core} position={[0, 1.95, 0]}>
-        <octahedronGeometry args={[0.55, 0]} />
-        <meshStandardMaterial color="#fff6dd" emissive={palette.gold} emissiveIntensity={active ? 2.4 : 1.4} flatShading />
-      </mesh>
-      <pointLight position={[0, 2, 0]} color="#ffd78a" intensity={active ? 14 : 8} distance={7} />
+      <TreehouseStudio active={active} rotation={facing(base, "about")} />
     </group>
   );
 }
@@ -179,12 +126,12 @@ function AboutBoards() {
   return (
     <>
       {stats.map((s, i) => (
-        <Board key={i} id="about" position={along("about", c, 4.4, (i - 1) * 2.5, 1.5)} width={190} delay={150 + i * 120} className="board--stat">
+        <Board key={i} id="about" position={along("about", c, 4.6, (i - 1) * 2.5, 0.9)} width={190} delay={150 + i * 120} className="board--stat">
           <strong>{s.big}</strong>
           <span>{s.small}</span>
         </Board>
       ))}
-      <Board id="about" position={along("about", c, 4.6, 0, 3.15)} width={250} delay={520} className="board--stone">
+      <Board id="about" position={along("about", c, 4.2, -3.4, 3.6)} width={250} delay={520} className="board--stone">
         <span>{profile.focus.join(" · ")}</span>
         <em>Practical architecture, stable delivery.</em>
       </Board>
@@ -193,52 +140,14 @@ function AboutBoards() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Origin: a golden stupa among padauk trees, for Mandalay            */
+/* Origin: a red-brick campus schoolhouse, for university in Mandalay */
 /* ------------------------------------------------------------------ */
 
-function Stupa() {
-  const bell = useMemo(() => {
-    const pts = [
-      [0, 0],
-      [0.95, 0],
-      [0.92, 0.3],
-      [0.75, 0.75],
-      [0.45, 1.08],
-      [0.26, 1.24],
-      [0, 1.3],
-    ].map(([x, y]) => new THREE.Vector2(x, y));
-    return new THREE.LatheGeometry(pts, 24);
-  }, []);
+function Campus({ active }: { active: boolean }) {
+  const base = add(islands.origin.position, [0, TOP_Y, 0]);
   return (
-    <group position={add(islands.origin.position, [0, TOP_Y, 0])}>
-      {[1.9, 1.55, 1.22].map((w, i) => (
-        <mesh key={i} position={[0, 0.15 + i * 0.3, 0]} castShadow receiveShadow>
-          <boxGeometry args={[w, 0.3, w]} />
-          <meshStandardMaterial color={i === 0 ? palette.marble : palette.gold} metalness={i ? 0.45 : 0} roughness={0.5} />
-        </mesh>
-      ))}
-      <mesh geometry={bell} position={[0, 0.9, 0]} castShadow>
-        <meshStandardMaterial color={palette.gold} metalness={0.6} roughness={0.3} />
-      </mesh>
-      {[0, 1, 2, 3].map((i) => (
-        <mesh key={i} position={[0, 2.3 + i * 0.2, 0]}>
-          <torusGeometry args={[0.26 - i * 0.045, 0.05, 6, 20]} />
-          <meshStandardMaterial color={palette.gold} metalness={0.6} roughness={0.3} />
-        </mesh>
-      ))}
-      <mesh position={[0, 3.25, 0]} castShadow>
-        <coneGeometry args={[0.12, 0.9, 10]} />
-        <meshStandardMaterial color={palette.gold} metalness={0.6} roughness={0.3} />
-      </mesh>
-      <mesh position={[0, 3.78, 0]}>
-        <sphereGeometry args={[0.09, 10, 8]} />
-        <meshStandardMaterial color="#fffbe6" emissive="#ffd36b" emissiveIntensity={3} />
-      </mesh>
-      {[-1, 1].map((s) => (
-        <group key={s} position={[s * 1.4, 0, 1.2]}>
-          <Lamp />
-        </group>
-      ))}
+    <group position={base}>
+      <Schoolhouse active={active} rotation={facing(base, "origin")} />
     </group>
   );
 }
@@ -247,7 +156,7 @@ function OriginBoards() {
   const c = islands.origin.position;
   return (
     <>
-      <Board id="origin" position={along("origin", c, 2.2, 2.5, 2.6)} width={250} delay={150} className="board--plaque">
+      <Board id="origin" position={along("origin", c, 2.2, 2.7, 3.5)} width={250} delay={150} className="board--plaque">
         <small>{education.period}</small>
         <strong>{education.degree}</strong>
         <span>{education.school}</span>
@@ -641,7 +550,7 @@ export const Landmarks = memo(function Landmarks({ focus, onSelect }: { focus: F
         <SkyHall active={focus === "about"} />
       </Landmark>
       <Landmark id="origin" focus={focus} onSelect={onSelect}>
-        <Stupa />
+        <Campus active={focus === "origin"} />
       </Landmark>
       <Landmark id="experience" focus={focus} onSelect={onSelect}>
         <Steps />

@@ -15,7 +15,7 @@ export const profile = {
   name: "Hlaing Min Thein",
   role: "Software Engineer",
   headline: "Building reliable products with clean execution.",
-  location: "Ho Chi Minh City, Vietnam",
+  location: "Da Nang, Vietnam",
   years: 7,
   summary:
     "Software engineer with 7 years in the JavaScript ecosystem and, more recently, Go. I build and scale web and mobile applications, lead small dev teams, and look after production systems for high-traffic products, handling everything from UI/UX implementation to backend logic and cloud deployments on AWS and Azure.",
@@ -336,8 +336,8 @@ export const stats = [
 ];
 
 export const sections: { id: SectionId; label: string; place: string }[] = [
-  { id: "about", label: "About", place: "Sky Hall" },
-  { id: "origin", label: "Origin", place: "Golden Stupa" },
+  { id: "about", label: "About", place: "Treehouse" },
+  { id: "origin", label: "Origin", place: "Campus" },
   { id: "experience", label: "Experience", place: "Stairway" },
   { id: "skills", label: "Skills", place: "Observatory" },
   { id: "projects", label: "Projects", place: "Gallery" },
